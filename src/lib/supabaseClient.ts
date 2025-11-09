@@ -1,14 +1,13 @@
 import { createClient } from '@supabase/supabase-js'
 
-// Use a fallback for build-time rendering, but require them for client-side execution
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'http://localhost:54321'
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'your-anon-key'
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-// A função createClient do Supabase não lança um erro se as chaves estiverem faltando,
-// mas as chamadas de API subsequentes falharão.
-// Esta verificação garante que a aplicação não funcione sem as chaves no ambiente do cliente.
-if (typeof window !== 'undefined' && (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)) {
-  throw new Error('Missing Supabase URL or anonymous key. Make sure to set them in your .env.local file.')
-}
+// Flag para verificar se as chaves estão presentes.
+export const areSupabaseKeysSet = !!(supabaseUrl && supabaseAnonKey)
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+// Cria o cliente apenas se as chaves estiverem presentes.
+// Para o build, ele pode usar chaves vazias temporariamente, mas a flag acima controlará a UI.
+export const supabase = areSupabaseKeysSet
+  ? createClient(supabaseUrl!, supabaseAnonKey!)
+  : {} as any; // Devolve um objeto vazio se as chaves não estiverem setadas
