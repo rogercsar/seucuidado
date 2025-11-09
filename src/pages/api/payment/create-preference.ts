@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import client from '@/lib/mercadopago';
 import { Preference } from 'mercadopago';
-import { CreatePreferencePayload } from 'mercadopago/models/preferences/create-payload.model';
 
 export default async function handler(
   req: NextApiRequest,
@@ -16,7 +15,8 @@ export default async function handler(
     const { title, unit_price, quantity } = req.body;
     const preferenceClient = new Preference(client);
 
-    const preferenceData: CreatePreferencePayload = {
+    // Deixando o TypeScript inferir o tipo. O método `create` fará a validação.
+    const preferenceData = {
       items: [
         {
           title: title || 'Atendimento Cuidar.me',
@@ -34,7 +34,6 @@ export default async function handler(
       auto_return: 'approved',
     };
 
-    // A estrutura de dados correta é aninhar o payload em 'body'
     const response = await preferenceClient.create({ body: preferenceData });
 
     res.status(201).json({
