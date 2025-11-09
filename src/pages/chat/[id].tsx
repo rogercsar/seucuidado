@@ -4,6 +4,7 @@ import { useAuth } from '@/lib/AuthContext';
 import { Button } from '@/components/ui/Button';
 import { Send } from 'lucide-react';
 import { useRouter } from 'next/router';
+import { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
 
 interface Message {
   id: number;
@@ -49,8 +50,8 @@ export default function ChatPage() {
       .on(
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'messages', filter: `chat_id=eq.${chatId}` },
-        (payload) => {
-          setMessages((prevMessages) => [...prevMessages, payload.new as Message]);
+        (payload: RealtimePostgresChangesPayload<Message>) => {
+          setMessages((prevMessages) => [...prevMessages, payload.new]);
         }
       )
       .subscribe();
