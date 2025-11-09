@@ -11,6 +11,7 @@ interface Message {
   user_id: string;
   content: string;
   created_at: string;
+  chat_id?: string; // chat_id é opcional na interface, pois vem do insert, mas não necessariamente do select
 }
 
 export default function ChatPage() {
@@ -37,7 +38,7 @@ export default function ChatPage() {
         .eq('chat_id', chatId)
         .order('created_at', { ascending: true });
       if (error) console.error('Error fetching messages:', error);
-      else setMessages(data || []);
+      else setMessages(data as Message[] || []);
     };
     fetchMessages();
   }, [chatId]);
@@ -50,8 +51,8 @@ export default function ChatPage() {
       .on(
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'messages', filter: `chat_id=eq.${chatId}` },
-        (payload: RealtimePostgresChangesPayload<Message>) => {
-          setMessages((prevMessages) => [...prevMessages, payload.new]);
+        (payload: RealtimePostgresChangesPayload<{ [key: string]: any }>) => {
+          setMessages((prevMessages) => [...prevMessages, payload.new as Message]);
         }
       )
       .subscribe();
