@@ -20,7 +20,7 @@ const Header = () => {
     <header className="bg-white/80 dark:bg-dark-bg/80 backdrop-blur-sm sticky top-0 z-50 w-full border-b border-gray-200 dark:border-gray-800">
       <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
         <Link href="/" className="text-2xl font-bold font-poppins text-dark-text dark:text-white">
-          Cuidar.<span className="text-primary">me</span>
+          Seu<span className="text-primary">Cuidado</span>
         </Link>
         <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
           <Link href="/#services" className="transition-colors hover:text-primary">Serviços</Link>

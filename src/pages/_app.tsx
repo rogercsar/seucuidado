@@ -10,7 +10,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       <AuthProvider>
         <Head>
-          <title>Cuidar.me</title>
+          <title>SeuCuidado</title>
           <meta name="description" content="Conectando você ao cuidado certo." />
           <link rel="icon" href="/favicon.ico" />
         </Head>

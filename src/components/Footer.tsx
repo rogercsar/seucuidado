@@ -8,7 +8,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <h3 className="text-xl font-poppins font-bold text-dark-text dark:text-white">
-              Cuidar.<span className="text-primary">me</span>
+              Seu<span className="text-primary">Cuidado</span>
             </h3>
             <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
               Conectando você ao cuidado certo.
@@ -35,7 +35,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="mt-8 border-t border-gray-200 dark:border-gray-700 pt-4 text-center text-sm text-gray-500">
-          <p>&copy; {new Date().getFullYear()} Cuidar.me. Todos os direitos reservados.</p>
+          <p>&copy; {new Date().getFullYear()} SeuCuidado. Todos os direitos reservados.</p>
         </div>
       </div>
     </footer>

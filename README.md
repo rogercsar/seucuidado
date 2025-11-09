@@ -1,6 +1,6 @@
-# Cuidar.me - Conectando você ao cuidado certo
+# SeuCuidado - Conectando você ao cuidado certo
 
-Cuidar.me é uma plataforma web full-stack desenvolvida para conectar pessoas a profissionais da área da saúde para atendimentos domiciliares (home care). O projeto foi construído com Next.js, TypeScript, TailwindCSS, Supabase e Mercado Pago, com foco em usabilidade, empatia e confiança.
+SeuCuidado é uma plataforma web full-stack desenvolvida para conectar pessoas a profissionais da área da saúde para atendimentos domiciliares (home care). O projeto foi construído com Next.js, TypeScript, TailwindCSS, Supabase e Mercado Pago, com foco em usabilidade, empatia e confiança.
 
 ---
 
@@ -19,8 +19,8 @@ Estas instruções permitirão que você obtenha uma cópia do projeto em opera�
 
 1.  **Clone o repositório:**
     ```bash
-    git clone https://github.com/seu-usuario/cuidar.me.git
-    cd cuidar.me
+    git clone https://github.com/seu-usuario/seucuidado.git
+    cd seucuidado
     ```
 
 2.  **Instale as dependências:**
@@ -82,7 +82,7 @@ Este projeto está configurado para um deploy integrado (frontend e backend) na 
 1.  **Conecte seu repositório Git:**
     - Faça o login na [Netlify](https://app.netlify.com/).
     - Clique em "Add new site" > "Import an existing project" e selecione seu provedor Git.
-    - Escolha o repositório do Cuidar.me.
+    - Escolha o repositório do SeuCuidado.
 
 2.  **Configurações de Build:**
     - A Netlify deve detectar automaticamente que é um projeto Next.js. As configurações padrão geralmente funcionam:
@@ -96,6 +96,21 @@ Este projeto está configurado para um deploy integrado (frontend e backend) na 
 
 4.  **Clique em "Deploy site"**.
     - A Netlify irá construir e fazer o deploy do seu site. As funções da API (como a de criar preferência de pagamento) estarão disponíveis automaticamente como Netlify Functions.
+
+---
+
+## 🔧 Troubleshooting
+
+### Erro: `Missing Supabase URL or anonymous key.` no Navegador
+
+Se a navegação para o login/cadastro não funcionar e você vir este erro no console do navegador, significa que as variáveis de ambiente do Supabase não foram configuradas corretamente no seu serviço de deploy (Netlify).
+
+**Solução:**
+1.  Vá para o painel do seu site na Netlify.
+2.  Navegue até **Site settings > Build & deploy > Environment**.
+3.  Verifique se as variáveis `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY` existem e se os valores estão corretos.
+4.  **É crucial que os nomes das variáveis na Netlify sejam exatamente iguais aos do arquivo `.env.local`, incluindo o prefixo `NEXT_PUBLIC_`**.
+5.  Após adicionar ou corrigir as variáveis, vá para a aba **Deploys** e acione um novo deploy clicando em "Trigger deploy" > "Deploy site".
 
 ---
 
