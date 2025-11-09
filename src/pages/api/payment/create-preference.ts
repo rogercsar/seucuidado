@@ -15,10 +15,10 @@ export default async function handler(
     const { title, unit_price, quantity } = req.body;
     const preferenceClient = new Preference(client);
 
-    // Deixando o TypeScript inferir o tipo. O método `create` fará a validação.
     const preferenceData = {
       items: [
         {
+          id: title || 'atendimento-cuidar-me', // Adicionando o ID obrigatório
           title: title || 'Atendimento Cuidar.me',
           description: 'Serviço de agendamento de profissional de saúde',
           unit_price: Number(unit_price) || 100,
