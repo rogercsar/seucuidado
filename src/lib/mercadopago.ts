@@ -1,4 +1,4 @@
-import mercadopago from 'mercadopago';
+import { MercadoPagoConfig } from 'mercadopago';
 
 const accessToken = process.env.MERCADO_PAGO_ACCESS_TOKEN;
 
@@ -6,9 +6,12 @@ if (!accessToken) {
   throw new Error('Missing Mercado Pago Access Token. Please check your environment variables.');
 }
 
-// Inicializa o SDK do Mercado Pago
-mercadopago.configure({
-  access_token: accessToken,
+// Inicializa o cliente do Mercado Pago
+const client = new MercadoPagoConfig({
+  accessToken,
+  options: {
+    timeout: 5000,
+  }
 });
 
-export default mercadopago;
+export default client;

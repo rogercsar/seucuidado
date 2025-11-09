@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import mercadopago from '@/lib/mercadopago';
+import client from '@/lib/mercadopago';
+import { Preference } from 'mercadopago';
 import { PreferenceCreateData } from 'mercadopago/dist/clients/preference/create/types';
 
 export default async function handler(
@@ -12,10 +13,10 @@ export default async function handler(
   }
 
   try {
-    // No futuro, receberemos os dados do profissional e do agendamento via req.body
     const { title, unit_price, quantity } = req.body;
+    const preferenceClient = new Preference(client);
 
-    const preference: PreferenceCreateData = {
+    const preferenceData: PreferenceCreateData = {
       items: [
         {
           title: title || 'Atendimento Cuidar.me',
@@ -31,16 +32,13 @@ export default async function handler(
         pending: `${req.headers.origin}/payment/pending`,
       },
       auto_return: 'approved',
-      // Futuramente, podemos adicionar um webhook para receber notificações de pagamento
-      // notification_url: `${req.headers.origin}/api/payment/webhook`,
     };
 
-    const response = await mercadopago.preferences.create(preference);
+    const response = await preferenceClient.create({ body: preferenceData });
 
-    // Retorna o ID da preferência e o link para o sandbox
     res.status(201).json({
-      id: response.body.id,
-      sandbox_init_point: response.body.sandbox_init_point,
+      id: response.id,
+      sandbox_init_point: response.sandbox_init_point,
     });
 
   } catch (error: any) {
