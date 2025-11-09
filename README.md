@@ -33,7 +33,7 @@ Estas instruções permitirão que você obtenha uma cópia do projeto em opera�
     - Preencha as variáveis com suas chaves do Supabase e Mercado Pago.
 
     ```env
-    # Supabase
+    # Supabase (o prefixo NEXT_PUBLIC_ é OBRIGATÓRIO)
     NEXT_PUBLIC_SUPABASE_URL=SUA_URL_DO_SUPABASE
     NEXT_PUBLIC_SUPABASE_ANON_KEY=SUA_CHAVE_ANON_DO_SUPABASE
 
@@ -56,7 +56,7 @@ Estas instruções permitirão que você obtenha uma cópia do projeto em opera�
 
 1.  Crie um novo projeto no [Supabase](https://app.supabase.io).
 2.  Vá para **Project Settings > API**.
-3.  Copie a **Project URL** e a **anon public key** e cole-as no seu arquivo `.env.local`.
+3.  Copie a **Project URL** e a **anon public key** e cole-as no seu arquivo `.env.local`. **Lembre-se de manter o prefixo `NEXT_PUBLIC_`**.
 4.  **Tabelas do Banco de Dados:**
     - Vá para o **Table Editor** e crie as tabelas necessárias. Para o MVP, a tabela `messages` é essencial para o chat.
     - **Tabela `messages`:**
@@ -91,7 +91,8 @@ Este projeto está configurado para um deploy integrado (frontend e backend) na 
 
 3.  **Adicione as Variáveis de Ambiente:**
     - Vá para **Site settings > Build & deploy > Environment**.
-    - Adicione as mesmas variáveis de ambiente que você configurou no seu arquivo `.env.local` (Supabase URL, Anon Key, e as chaves do Mercado Pago).
+    - Adicione as mesmas variáveis de ambiente que você configurou no seu arquivo `.env.local`.
+    - **IMPORTANTE:** Para as variáveis do Supabase, certifique-se de que os nomes das variáveis na Netlify incluam o prefixo `NEXT_PUBLIC_` (ex: `NEXT_PUBLIC_SUPABASE_URL`).
 
 4.  **Clique em "Deploy site"**.
     - A Netlify irá construir e fazer o deploy do seu site. As funções da API (como a de criar preferência de pagamento) estarão disponíveis automaticamente como Netlify Functions.
