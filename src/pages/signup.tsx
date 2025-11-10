@@ -3,10 +3,13 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 
+type UserType = 'client' | 'provider';
+
 export default function SignUpPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [userType, setUserType] = useState<UserType>('client');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
@@ -21,6 +24,7 @@ export default function SignUpPage() {
       options: {
         data: {
           full_name: name,
+          user_type: userType, // Salvando o tipo de usuário nos metadados
         },
       },
     });
@@ -41,6 +45,21 @@ export default function SignUpPage() {
         </h2>
         {message && <p className="text-center p-2 bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-200 rounded-md">{message}</p>}
         <form className="space-y-6" onSubmit={handleSignUp}>
+
+          <div>
+            <label className="font-medium">Qual o seu objetivo?</label>
+            <div className="mt-2 grid grid-cols-2 gap-4">
+              <label className={`flex items-center p-3 border rounded-lg cursor-pointer ${userType === 'client' ? 'border-primary ring-2 ring-primary' : 'border-gray-300 dark:border-gray-700'}`}>
+                <input type="radio" name="userType" value="client" checked={userType === 'client'} onChange={() => setUserType('client')} className="h-4 w-4 text-primary focus:ring-primary border-gray-300" />
+                <span className="ml-3 text-sm font-medium">Quero contratar</span>
+              </label>
+              <label className={`flex items-center p-3 border rounded-lg cursor-pointer ${userType === 'provider' ? 'border-primary ring-2 ring-primary' : 'border-gray-300 dark:border-gray-700'}`}>
+                <input type="radio" name="userType" value="provider" checked={userType === 'provider'} onChange={() => setUserType('provider')} className="h-4 w-4 text-primary focus:ring-primary border-gray-300" />
+                <span className="ml-3 text-sm font-medium">Sou profissional</span>
+              </label>
+            </div>
+          </div>
+
           <div>
             <label htmlFor="name">Nome Completo</label>
             <input

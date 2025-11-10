@@ -16,18 +16,26 @@ export default function LoginPage() {
     setLoading(true);
     setMessage('');
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
     if (error) {
       setMessage(`Erro: ${error.message}`);
-    } else {
-      // Redirect to dashboard on successful login
-      router.push('/dashboard');
+      setLoading(false);
+      return;
     }
-    setLoading(false);
+
+    // Se o login for bem-sucedido, verifica o tipo de usuário e redireciona
+    if (data.user) {
+      const userType = data.user.user_metadata?.user_type;
+      if (userType === 'provider') {
+        router.push('/dashboard/provider');
+      } else {
+        router.push('/dashboard/client');
+      }
+    }
   };
 
   return (

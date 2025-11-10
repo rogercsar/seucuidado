@@ -58,7 +58,7 @@ export default function Home() {
       </section>
 
       {/* Professionals Section */}
-      <section className="py-16">
+      <section id="professionals" className="py-16">
         <h2 className="font-poppins text-3xl font-bold text-center text-dark-text dark:text-white mb-10">
           Profissionais em destaque
         </h2>
@@ -66,6 +66,22 @@ export default function Home() {
           {mockProfessionals.map((prof, index) => (
             <ProfessionalCard key={index} {...prof} />
           ))}
+        </div>
+      </section>
+
+      {/* Services Section Placeholder */}
+      <section id="services" className="py-16 bg-white dark:bg-dark-bg/50 rounded-lg">
+        <div className="container mx-auto text-center">
+          <h2 className="font-poppins text-3xl font-bold text-dark-text dark:text-white mb-4">Nossos Serviços</h2>
+          <p className="text-gray-600 dark:text-gray-300">Em breve, mais detalhes sobre os serviços que oferecemos.</p>
+        </div>
+      </section>
+
+      {/* Contact Section Placeholder */}
+      <section id="contact" className="py-16">
+        <div className="container mx-auto text-center">
+          <h2 className="font-poppins text-3xl font-bold text-dark-text dark:text-white mb-4">Entre em Contato</h2>
+          <p className="text-gray-600 dark:text-gray-300">Em breve, um formulário de contato estará disponível aqui.</p>
         </div>
       </section>
     </>
