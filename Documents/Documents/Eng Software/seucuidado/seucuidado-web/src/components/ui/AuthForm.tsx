@@ -25,6 +25,19 @@ export const AuthForm: React.FC = () => {
         if (signInErr) throw signInErr;
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) throw new Error('Falha ao autenticar.');
+        // Após login, garantir cookies de sessão para middleware SSR
+        const { data: sessionData } = await supabase.auth.getSession();
+        const access_token = sessionData?.session?.access_token;
+        const refresh_token = sessionData?.session?.refresh_token;
+        if (access_token && refresh_token) {
+          try {
+            await fetch('/api/auth/session', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ access_token, refresh_token })
+            });
+          } catch {}
+        }
         let assignedRole: 'user' | 'professional' = 'user';
         const { data: rows } = await supabase
           .from('users')
@@ -59,6 +72,19 @@ export const AuthForm: React.FC = () => {
         if (!user) {
           alert('Cadastro iniciado. Verifique seu e-mail para confirmar.');
           return;
+        }
+        // Após signup, garantir cookies de sessão (se sessão estiver ativa)
+        const { data: sessionData2 } = await supabase.auth.getSession();
+        const access_token2 = sessionData2?.session?.access_token;
+        const refresh_token2 = sessionData2?.session?.refresh_token;
+        if (access_token2 && refresh_token2) {
+          try {
+            await fetch('/api/auth/session', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ access_token: access_token2, refresh_token: refresh_token2 })
+            });
+          } catch {}
         }
         // Criar/atualizar registro em public.users com id do auth
         await supabase.from('users').upsert({

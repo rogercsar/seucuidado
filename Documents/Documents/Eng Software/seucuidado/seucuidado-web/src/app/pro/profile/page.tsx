@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '../../../lib/supabase';
 import { Button } from '../../../components/ui/Button';
 import { Heart, MapPin, UploadCloud, FileText, CheckCircle } from 'lucide-react';
+import { logoutAndClearAuth } from '../../../lib/auth';
 
 interface ProfessionalProfile {
   id: string;
@@ -62,6 +63,17 @@ export default function ProProfilePage() {
     }
     init();
   }, [router]);
+
+  async function handleLogout() {
+    try {
+      await logoutAndClearAuth();
+    } finally {
+      router.replace('/');
+      if (typeof window !== 'undefined') {
+        window.location.reload();
+      }
+    }
+  }
 
   async function handleUploadFiles(files: FileList | null) {
     if (!files || !professional) return;
@@ -147,6 +159,7 @@ export default function ProProfilePage() {
           </div>
           <div className="flex items-center gap-4">
             <Link href="/pro/dashboard"><Button variant="ghost">Painel PRO</Button></Link>
+            <Button className="rounded-full px-6 bg-red-500 hover:bg-red-600" onClick={handleLogout}>Sair</Button>
           </div>
         </div>
       </header>

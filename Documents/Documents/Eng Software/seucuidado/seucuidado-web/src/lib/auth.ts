@@ -25,6 +25,11 @@ function clearSupabaseLocalStorage() {
 
 export async function logoutAndClearAuth() {
   try {
+    // Limpa cookies de sessão no servidor (SSR) para o middleware
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+    } catch {}
+    // Também encerra a sessão no cliente
     await supabase.auth.signOut({ scope: 'global' } as any);
   } catch {
     // ignore errors

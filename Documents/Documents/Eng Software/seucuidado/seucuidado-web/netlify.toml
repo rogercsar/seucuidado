@@ -11,3 +11,25 @@
   NEXT_PUBLIC_GOOGLE_MAPS_API_KEY = ""
   MERCADOPAGO_ACCESS_TOKEN = ""
   NEXT_PUBLIC_BASE_URL = ""
+
+# Desabilitar cache para rotas protegidas
+[[headers]]
+for = "/dashboard"
+[headers.values]
+  Cache-Control = "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0"
+  Pragma = "no-cache"
+  Expires = "0"
+
+[[headers]]
+for = "/pro/*"
+[headers.values]
+  Cache-Control = "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0"
+  Pragma = "no-cache"
+  Expires = "0"
+
+[[headers]]
+for = "/professional/*"
+[headers.values]
+  Cache-Control = "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0"
+  Pragma = "no-cache"
+  Expires = "0"
