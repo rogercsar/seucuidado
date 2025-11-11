@@ -3,21 +3,25 @@ import { cookies } from 'next/headers';
 import { createServerClient } from '@supabase/ssr';
 
 export async function POST() {
+  // Cria a resposta primeiro para que o adapter de cookies escreva nela
+  const res = NextResponse.json({ ok: true });
   try {
-    const cookieStore = cookies();
+    const requestCookies = cookies();
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
       {
         cookies: {
           get(name: string) {
-            return cookieStore.get(name)?.value;
+            return requestCookies.get(name)?.value;
           },
           set(name: string, value: string, options: any) {
-            cookieStore.set({ name, value, ...options });
+            // Escreve cookies na resposta para garantir Set-Cookie
+            res.cookies.set(name, value, options);
           },
           remove(name: string, options: any) {
-            cookieStore.set({ name, value: '', ...options });
+            // Remove de forma explícita com maxAge 0
+            res.cookies.set(name, '', { ...options, maxAge: 0 });
           },
         },
       }
@@ -25,7 +29,6 @@ export async function POST() {
 
     await supabase.auth.signOut();
 
-    const res = NextResponse.json({ ok: true });
     res.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate');
     res.headers.set('Pragma', 'no-cache');
     return res;
