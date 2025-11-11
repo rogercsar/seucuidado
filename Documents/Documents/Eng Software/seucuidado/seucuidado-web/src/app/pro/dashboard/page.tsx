@@ -8,6 +8,7 @@ import { supabase } from '../../../lib/supabase';
 import { Button } from '../../../components/ui/Button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../components/ui/Tabs';
 import { Heart, MapPin, Calendar, Check, X, ClipboardCheck, AlertTriangle } from 'lucide-react';
+import { logoutAndClearAuth } from '../../../lib/auth';
 
 interface AppointmentItem {
   id: string;
@@ -91,9 +92,7 @@ export default function ProDashboardPage() {
 
   async function handleLogout() {
     try {
-      await supabase.auth.signOut();
-    } catch (e) {
-      // ignore
+      await logoutAndClearAuth();
     } finally {
       router.push('/');
     }

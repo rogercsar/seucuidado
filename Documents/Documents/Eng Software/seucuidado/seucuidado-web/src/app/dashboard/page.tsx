@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/Ta
 import { useRouter } from 'next/navigation';
 import { supabase } from '../../lib/supabase';
 import { useEffect, useState } from 'react';
+import { logoutAndClearAuth } from '../../lib/auth';
 
 interface AppointmentWithProfessional {
   id: string;
@@ -148,9 +149,7 @@ export default function DashboardPage() {
 
   async function handleLogout() {
     try {
-      await supabase.auth.signOut();
-    } catch (e) {
-      // ignore errors for now
+      await logoutAndClearAuth();
     } finally {
       router.push('/');
     }
