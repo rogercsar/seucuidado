@@ -157,7 +157,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-sky-50 to-emerald-50">
+    <main className="min-h-screen overflow-x-hidden bg-gradient-to-br from-sky-50 to-emerald-50">
       {/* Header */}
       <header className="border-b bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">

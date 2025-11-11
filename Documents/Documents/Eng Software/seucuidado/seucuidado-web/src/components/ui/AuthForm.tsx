@@ -8,6 +8,9 @@ export const AuthForm: React.FC = () => {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [role, setRole] = useState<'user' | 'professional'>('user');
+  const [specialty, setSpecialty] = useState('');
+  const [city, setCity] = useState('');
+  const [pricePerHour, setPricePerHour] = useState<string>('');
   const [mode, setMode] = useState<'login' | 'signup'>('login');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -34,6 +37,18 @@ export const AuthForm: React.FC = () => {
         }
         router.push(assignedRole === 'professional' ? '/pro/dashboard' : '/dashboard');
       } else {
+        // Validação de campos para profissional
+        if (role === 'professional') {
+          if (!specialty.trim() || !city.trim() || !pricePerHour.trim()) {
+            setError('Preencha especialidade, cidade e preço/hora.');
+            return;
+          }
+          const priceNum = Number(pricePerHour);
+          if (isNaN(priceNum) || priceNum <= 0) {
+            setError('Informe um preço/hora válido (> 0).');
+            return;
+          }
+        }
         const { error: signUpErr } = await supabase.auth.signUp({
           email,
           password,
@@ -52,12 +67,15 @@ export const AuthForm: React.FC = () => {
           name,
           role
         } as any);
-        // Se profissional, criar registro mínimo em professionals
+        // Se profissional, criar registro com dados completos
         if (role === 'professional') {
           await supabase.from('professionals').insert({
             user_id: user.id,
-            specialty: 'A definir',
-            price_per_hour: 0
+            specialty: specialty.trim(),
+            price_per_hour: Number(pricePerHour),
+            city: city.trim(),
+            radius_km: 10,
+            approved: false
           } as any);
           router.push('/pro/dashboard');
         } else {
@@ -85,6 +103,13 @@ export const AuthForm: React.FC = () => {
               <button type="button" onClick={() => setRole('professional')} className={`px-3 py-2 rounded-xl border ${role === 'professional' ? 'bg-emerald-100 border-emerald-300' : 'bg-white'}`}>Sou profissional</button>
             </div>
           </div>
+          {role === 'professional' && (
+            <div className="space-y-2 mb-3">
+              <input className="border rounded-xl px-3 py-2 w-full" placeholder="Especialidade" value={specialty} onChange={(e) => setSpecialty(e.target.value)} />
+              <input className="border rounded-xl px-3 py-2 w-full" placeholder="Cidade" value={city} onChange={(e) => setCity(e.target.value)} />
+              <input type="number" min="0" step="1" className="border rounded-xl px-3 py-2 w-full" placeholder="Preço/hora (R$)" value={pricePerHour} onChange={(e) => setPricePerHour(e.target.value)} />
+            </div>
+          )}
         </>
       )}
       <input className="border rounded-xl px-3 py-2 mb-2 w-full" placeholder="E-mail" value={email} onChange={(e) => setEmail(e.target.value)} />

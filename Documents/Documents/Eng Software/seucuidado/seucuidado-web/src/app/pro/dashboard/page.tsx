@@ -7,7 +7,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../../../lib/supabase';
 import { Button } from '../../../components/ui/Button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../components/ui/Tabs';
-import { Heart, MapPin, Calendar, Check, X, ClipboardCheck } from 'lucide-react';
+import { Heart, MapPin, Calendar, Check, X, ClipboardCheck, AlertTriangle } from 'lucide-react';
 
 interface AppointmentItem {
   id: string;
@@ -24,6 +24,7 @@ export default function ProDashboardPage() {
   const [professionalId, setProfessionalId] = useState<string | null>(null);
   const [appointments, setAppointments] = useState<AppointmentItem[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [profileIncomplete, setProfileIncomplete] = useState<boolean>(false);
 
   useEffect(() => {
     async function init() {
@@ -38,7 +39,7 @@ export default function ProDashboardPage() {
         // localizar profissional vinculado ao usuário autenticado
         const { data: profs, error: profErr } = await supabase
           .from('professionals')
-          .select('id, user_id')
+          .select('id, user_id, specialty, price_per_hour, city, radius_km, approved, documents')
           .eq('user_id', user.id)
           .limit(1);
         if (profErr) throw profErr;
@@ -49,6 +50,8 @@ export default function ProDashboardPage() {
           return;
         }
         setProfessionalId(prof.id);
+        const incomplete = !prof.specialty || prof.specialty === 'A definir' || !prof.city || !prof.price_per_hour || Number(prof.price_per_hour) <= 0 || prof.approved === false || !prof.documents;
+        setProfileIncomplete(!!incomplete);
         // buscar appointments para este profissional
         const { data: apps, error: appsErr } = await supabase
           .from('appointments')
@@ -86,6 +89,16 @@ export default function ProDashboardPage() {
     init();
   }, [router]);
 
+  async function handleLogout() {
+    try {
+      await supabase.auth.signOut();
+    } catch (e) {
+      // ignore
+    } finally {
+      router.push('/');
+    }
+  }
+
   async function updateStatus(id: string, status: 'scheduled' | 'canceled' | 'completed') {
     try {
       const { error } = await supabase
@@ -105,7 +118,7 @@ export default function ProDashboardPage() {
   const history = useMemo(() => appointments.filter(a => a.status === 'completed' || a.status === 'canceled' || new Date(a.scheduled_at) < now), [appointments]);
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-sky-50 to-emerald-50">
+    <main className="min-h-screen overflow-x-hidden bg-gradient-to-br from-sky-50 to-emerald-50">
       {/* Header */}
       <header className="border-b bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
@@ -121,9 +134,23 @@ export default function ProDashboardPage() {
           <div className="flex items-center gap-4">
             <Link href="/dashboard"><Button variant="ghost">Painel do Cliente</Button></Link>
             <Link href="/professionals"><Button variant="ghost">Descobrir</Button></Link>
+            <Button className="rounded-full px-6 bg-red-500 hover:bg-red-600" onClick={handleLogout}>Sair</Button>
           </div>
         </div>
       </header>
+
+      {profileIncomplete && (
+        <div className="max-w-6xl mx-auto p-4">
+          <div className="mb-6 p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 mt-0.5 text-amber-500" />
+            <div className="flex-1">
+              <p className="font-semibold">Complete seu perfil profissional</p>
+              <p className="text-sm">Adicione documentos, defina o raio de atendimento, especialidade, cidade e preço/hora para ficar visível e receber pedidos.</p>
+            </div>
+            <Link href="/pro/profile"><Button className="rounded-full bg-amber-500 hover:bg-amber-600">Completar perfil</Button></Link>
+          </div>
+        </div>
+      )}
 
       <div className="max-w-6xl mx-auto p-4 py-8">
         {loading && (
