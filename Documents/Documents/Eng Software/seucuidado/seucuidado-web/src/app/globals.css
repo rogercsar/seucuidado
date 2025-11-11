@@ -14,7 +14,6 @@ html, body {
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: 'Nunito Sans', 'Inter', sans-serif;
 }
 
 .dark body {

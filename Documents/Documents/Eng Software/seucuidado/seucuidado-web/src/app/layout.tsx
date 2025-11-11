@@ -2,8 +2,8 @@ import './globals.css';
 import { Nunito_Sans, Poppins } from 'next/font/google';
 import React from 'react';
 
-const nunito = Nunito_Sans({ subsets: ['latin'], weight: ['400', '500'] });
-const poppins = Poppins({ subsets: ['latin'], weight: ['600', '700'] });
+const nunito = Nunito_Sans({ subsets: ['latin'], weight: ['400', '500'], adjustFontFallback: false, fallback: ['system-ui', 'sans-serif'] });
+const poppins = Poppins({ subsets: ['latin'], weight: ['600', '700'], adjustFontFallback: false, fallback: ['system-ui', 'sans-serif'] });
 
 export const metadata = {
   title: 'SeuCuidado — Conectando você ao cuidado certo',
