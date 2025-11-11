@@ -1,4 +1,10 @@
 {
+  "name": "seucuidado-root",
+  "private": true,
+  "scripts": {},
+  "dependencies": {
+    "@supabase/auth-helpers-nextjs": "^0.10.0"
+  },
   "devDependencies": {
     "@types/google.maps": "^3.58.1"
   }
