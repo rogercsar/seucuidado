@@ -25,7 +25,7 @@ function clearSupabaseLocalStorage() {
 
 export async function logoutAndClearAuth() {
   try {
-    await supabase.auth.signOut();
+    await supabase.auth.signOut({ scope: 'global' } as any);
   } catch {
     // ignore errors
   } finally {

@@ -94,7 +94,10 @@ export default function ProDashboardPage() {
     try {
       await logoutAndClearAuth();
     } finally {
-      router.push('/');
+      router.replace('/');
+      if (typeof window !== 'undefined') {
+        window.location.reload();
+      }
     }
   }
 

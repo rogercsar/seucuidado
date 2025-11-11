@@ -151,7 +151,10 @@ export default function DashboardPage() {
     try {
       await logoutAndClearAuth();
     } finally {
-      router.push('/');
+      router.replace('/');
+      if (typeof window !== 'undefined') {
+        window.location.reload();
+      }
     }
   }
 
