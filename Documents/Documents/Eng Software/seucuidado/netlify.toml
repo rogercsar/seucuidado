@@ -1,7 +1,6 @@
 [build]
-  base = "seucuidado-web"
-  command = "npm run build"
-  publish = ".next"
+  command = "npm --prefix seucuidado-web run build"
+  publish = "seucuidado-web/.next"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
@@ -12,3 +11,9 @@
   NEXT_PUBLIC_GOOGLE_MAPS_API_KEY = ""
   MERCADOPAGO_ACCESS_TOKEN = ""
   NEXT_PUBLIC_BASE_URL = ""
+
+[[redirects]]
+  from = "/favicon.ico"
+  to = "/icon.svg"
+  status = 200
+  force = true
