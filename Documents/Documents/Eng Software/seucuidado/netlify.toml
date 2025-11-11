@@ -1,7 +1,6 @@
 [build]
-  base = "seucuidado-web"
-  command = "npm run build"
-  publish = ".next"
+  command = "npm --prefix seucuidado-web run build"
+  publish = "seucuidado-web/.next"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
